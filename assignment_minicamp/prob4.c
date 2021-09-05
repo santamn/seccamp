@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
     char *args[100];
     while (1)
     {
-        printf("Input: \n");
+        printf("Input: ");
         if (get_args(args) == 0)
         {
             printf("読み取り不可");
@@ -39,6 +39,7 @@ int main(int argc, char const *argv[])
             perror("waitpid");
             exit(1);
         }
+
         if (WIFEXITED(status))
         {
             // 子プロセスが正常終了の場合
