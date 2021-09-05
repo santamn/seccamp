@@ -1,0 +1,15 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	conn
+#open	2021-09-06-01-12-37
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	local_resp	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents
+#types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	bool	count	string	count	count	count	count	set[string]
+1629261443.695728	CPmgTU2TdA16CWV8bi	163.221.167.122	35828	163.221.8.11	53	udp	dns	0.000200	32	48	SF	-	-	0	Dd	1	60	1	76	-
+1629261443.696538	CyurzT2aY8Uosi1NMi	163.221.167.122	33741	163.221.8.11	53	udp	dns	0.000123	32	60	SF	-	-	0	Dd	1	60	1	88	-
+1629261443.697068	ClMIEQ2ewOucUvvUMd	163.221.167.122	55825	163.221.8.11	53	udp	dns	0.000145	32	59	SF	-	-	0	Dd	1	60	1	87	-
+1629261492.079156	CcNY5u4GxiuUH7LuVg	163.221.167.132	52054	163.221.167.122	12346	tcp	-	0.000099	0	0	REJ	-	-	0	Sr	1	60	1	40	-
+1629261471.826807	CxZvZWXyc2U3pSLne	163.221.167.132	54504	163.221.167.122	12345	udp	-	-	-	-	S0	-	-	0	D	1	33	0	0	-
+1629261503.302296	CZlEtN2Db4jMVXsPzj	163.221.167.132	52056	163.221.167.122	12346	tcp	-	22.865962	11	27	SF	-	-	0	ShADadFf	8	435	6	347	-
+#close	2021-09-06-01-12-37

@@ -1,0 +1,12 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	dns
+#open	2021-09-06-01-12-37
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	trans_id	rtt	query	qclass	qclass_name	qtype	qtype_name	rcode	rcode_name	AA	TC	RD	RA	Z	answers	TTLs	rejected
+#types	time	string	addr	port	addr	port	enum	count	interval	string	count	string	count	string	count	string	bool	bool	bool	bool	count	vector[string]	vector[interval]	bool
+1629261443.695728	CPmgTU2TdA16CWV8bi	163.221.167.122	35828	163.221.8.11	53	udp	1409	0.000200	green.naist.jp	1	C_INTERNET	1	A	0	NOERROR	F	F	T	T	0	163.221.169.88	876.000000	F
+1629261443.696538	CyurzT2aY8Uosi1NMi	163.221.167.122	33741	163.221.8.11	53	udp	39758	0.000123	green.naist.jp	1	C_INTERNET	28	AAAA	0	NOERROR	F	F	T	T	0	2001:200:16a:1009::88	876.000000	F
+1629261443.697068	ClMIEQ2ewOucUvvUMd	163.221.167.122	55825	163.221.8.11	53	udp	15391	0.000145	green.naist.jp	1	C_INTERNET	15	MX	0	NOERROR	F	F	T	T	0	mailgate32.naist.jp	876.000000	F
+#close	2021-09-06-01-12-37
