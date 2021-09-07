@@ -38,7 +38,7 @@ int split(char *str, char **splited, char s) {
             str[i] = '\0';
             splited[count++] = ptr;
             while (str[++i] == s)
-                ;  // 文字sの連続が終わるところまで読み飛ばす
+                ; // 文字sの連続が終わるところまで読み飛ばす
             ptr = &str[i];
         }
     }
@@ -54,20 +54,21 @@ char *trim(char *str, char s) { return triml(trimr(str, s), s); }
 // strの左側から文字sを削除した文字列へのアドレスを返す
 char *triml(char *str, char s) {
     int i = 0;
-    while (str[i] == s && i < strlen(str)) {
-        i++;
-    }
+    int len = strlen(str);
+
+    while (str[i] == s && i++ < len)
+        ;
 
     return &str[i];
 }
 
-// strの右側から文字sを削除した文字列
+// strの右側から文字sを削除した文字列へのアドレスを返す
 char *trimr(char *str, char s) {
     int i = 1;
     int len = strlen(str);
-    while (str[len - i] == s && i <= len) {
-        i++;
-    }
+
+    while (str[len - i] == s && i++ <= len)
+        ;
     str[len - i + 1] = '\0';
 
     return str;
