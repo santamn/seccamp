@@ -8,7 +8,7 @@ int split(char *, char **, char);
 
 int main(void) {
     char *args[10];
-    char buffer[] = "/bin/ls -l -a -b -c";
+    char buffer[] = "/bin/ls -l -a -b -c -d -e -f -g";
     int length = strlen(buffer);
 
     printf("length: %d\n", length);
@@ -27,8 +27,7 @@ int main(void) {
     return 0;
 }
 
-// 文字sごとに文字列を区切る
-// sで両側をトリムされた文字列を使用する
+// sで両側をトリムされた文字列を文字sごとに区切る
 int split(char *str, char **splited, char s) {
     int count = 0;
     int len = strlen(str);
@@ -46,7 +45,7 @@ int split(char *str, char **splited, char s) {
     splited[count] = ptr;
     splited[++count] = NULL;
 
-    return count;
+    return count + 1;
 }
 
 // strの両側から文字sを削除した文字列を返す
