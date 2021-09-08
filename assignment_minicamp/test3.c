@@ -1,11 +1,10 @@
 #include <stdio.h>
 
-int main(int argc, char const* argv[]) {
-    int i = 0;
-    if (i++ <= 0) {
-        printf("0のまま: %d\n", i);
+int main(int argc, char const *argv[]) {
+    if (!1) {
+        printf("true\n");
     } else {
-        printf("1になる: %d\n", i);
+        printf("false\n");
     }
     return 0;
 }
