@@ -8,20 +8,21 @@ char *triml(char *, char);
 char *trimr(char *, char);
 char *trim(char *, char);
 int split(char *, char **, char);
-int get_args(char *, char **);
+int get_args(char *, size_t, char **);
 
 int main(int argc, char const *argv[]) {
     char *args[100];
     char *buffer;
+    size_t size = 256;
+
     while (1) {
         printf("Input: ");
 
-        buffer = (char *)malloc(256);
-        if (get_args(buffer, args) == 0) {
-            printf("読み取り不可");
+        buffer = (char *)malloc(size);
+        if (get_args(buffer, size, args) == 0) {
+            printf("fail to get input\n");
             exit(1);
         }
-        printf("Input確認: %s\n", args[0]);
 
         // 子プロセスを生成してexecを実行
         pid_t pid = fork();
@@ -43,12 +44,11 @@ int main(int argc, char const *argv[]) {
             exit(1);
         }
 
-        if (WIFEXITED(status)) {
-            // 子プロセスが正常終了の場合
-            printf("child exit-code=%d\n", WEXITSTATUS(status));
-        } else {
+        if (!WIFEXITED(status)) {
+            // 子プロセスが異常終了した場合
             printf("child status=%04x\n", status);
         }
+
         free(buffer);
     }
 
@@ -56,31 +56,26 @@ int main(int argc, char const *argv[]) {
 }
 
 // 標準入力を読み取って空白ごとに切り分けた配列を返す関数
-int get_args(char *buffer, char *args[]) {
-    if (fgets(buffer, 256, stdin) == NULL || buffer[0] == '\n') {
+int get_args(char *buffer, size_t buf_size, char *args[]) {
+    // 文字列が空の場合はエラー
+    if (fgets(buffer, buf_size, stdin) == NULL || buffer[0] == '\n') {
         return 0;
     }
 
     // 行末の改行文字を取り除く
-    int length = strlen(buffer);
+    size_t length = strlen(buffer);
     if (buffer[length - 1] == '\n') {
         buffer[--length] = '\0';
     }
 
     char space = ' ';
-    int count = split(trim(buffer, space), args, space);
-
-    for (int i = 0; i < count; i++) {
-        printf("args[%d]: '%s'\n", i, args[i]);
-    }
-
-    return count;
+    return split(trim(buffer, space), args, space);
 }
 
-// sで両側をトリムされた文字列を文字sごとに区切る
+// sで両側をトリムされた文字列strを文字sごとに区切る関数
 int split(char *str, char *splited[], char s) {
     int count = 0;
-    int len = strlen(str);
+    size_t len = strlen(str);
     char *ptr = str;
 
     for (int i = 0; i < len; i++) {
@@ -98,13 +93,13 @@ int split(char *str, char *splited[], char s) {
     return count + 1;
 }
 
-// strの両側から文字sを削除した文字列を返す
+// strの両側から文字sを削除した文字列を返す関数
 char *trim(char *str, char s) { return triml(trimr(str, s), s); }
 
-// strの左側から文字sを削除した文字列へのアドレスを返す
+// strの左側から文字sを削除した文字列へのアドレスを返す関数
 char *triml(char *str, char s) {
     int i = 0;
-    int len = strlen(str);
+    size_t len = strlen(str);
 
     while (str[i] == s && i++ < len)
         ;
@@ -112,10 +107,10 @@ char *triml(char *str, char s) {
     return &str[i];
 }
 
-// strの右側から文字sを削除した文字列へのアドレスを返す
+// strの右側から文字sを削除した文字列へのアドレスを返す関数
 char *trimr(char *str, char s) {
     int i = 1;
-    int len = strlen(str);
+    size_t len = strlen(str);
 
     while (str[len - i] == s && i++ <= len)
         ;
