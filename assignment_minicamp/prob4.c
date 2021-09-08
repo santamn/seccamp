@@ -4,6 +4,12 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+char *triml(char *, char);
+char *trimr(char *, char);
+char *trim(char *, char);
+int split(char *, char **, char);
+int get_args(char *, char **);
+
 int main(int argc, char const *argv[]) {
     char *args[100];
     char *buffer;
@@ -31,7 +37,7 @@ int main(int argc, char const *argv[]) {
 
         // 親プロセス
         int status;
-        pid_t r = waitpid(pid, &status, 0);  //子プロセスの終了待ち
+        pid_t r = waitpid(pid, &status, 0); //子プロセスの終了待ち
         if (r < 0) {
             perror("waitpid");
             exit(1);
@@ -51,36 +57,18 @@ int main(int argc, char const *argv[]) {
 
 // 標準入力を読み取って空白ごとに切り分けた配列を返す関数
 int get_args(char *buffer, char *args[]) {
-    size_t length;
-    char *ptr;
-
     if (fgets(buffer, 256, stdin) == NULL || buffer[0] == '\n') {
         return 0;
     }
-    printf("buffer: %s\n", buffer);
 
     // 行末の改行文字を取り除く
-    length = strlen(buffer);
+    int length = strlen(buffer);
     if (buffer[length - 1] == '\n') {
         buffer[--length] = '\0';
     }
 
-    // 空白ごとに文字列を区切る
-    int count = 0;
-    ptr = buffer;
-    for (int i = 0; i < length; i++) {
-        if (i == length - 1)  // 行末
-        {
-            args[count] = ptr;
-        } else if (buffer[i] == ' ' && buffer[i + 1] != ' ') {
-            // 連続した空白の終わり
-            buffer[i] = '\0';
-            args[count] = ptr;
-            ptr = &buffer[i] + sizeof(char);
-            count++;
-        }
-    }
-    args[++count] = NULL;
+    char space = ' ';
+    int count = split(trim(buffer, space), args, space);
 
     for (int i = 0; i < count; i++) {
         printf("args[%d]: '%s'\n", i, args[i]);
@@ -89,22 +77,49 @@ int get_args(char *buffer, char *args[]) {
     return count;
 }
 
+// sで両側をトリムされた文字列を文字sごとに区切る
+int split(char *str, char *splited[], char s) {
+    int count = 0;
+    int len = strlen(str);
+    char *ptr = str;
+
+    for (int i = 0; i < len; i++) {
+        if (str[i] == s) {
+            str[i] = '\0';
+            splited[count++] = ptr;
+            while (str[++i] == s)
+                ; // 文字sの連続が終わるところまで読み飛ばす
+            ptr = &str[i];
+        }
+    }
+    splited[count] = ptr;
+    splited[++count] = NULL;
+
+    return count + 1;
+}
+
+// strの両側から文字sを削除した文字列を返す
+char *trim(char *str, char s) { return triml(trimr(str, s), s); }
+
 // strの左側から文字sを削除した文字列へのアドレスを返す
-char *triml(char *str, int len, char s) {
+char *triml(char *str, char s) {
     int i = 0;
-    while (str[i++] == s && i < len)
+    int len = strlen(str);
+
+    while (str[i] == s && i++ < len)
         ;
 
     return &str[i];
 }
 
-// strの右側から文字sを削除した文字列
-char *trimr(char *str, int len, char s) {
+// strの右側から文字sを削除した文字列へのアドレスを返す
+char *trimr(char *str, char s) {
     int i = 1;
-    while (str[len - i] == s && i < len) {
-        i++;
-    }
-    str[len - i] = '\0';
+    int len = strlen(str);
 
-    return *str;
+    while (str[len - i] == s && i++ <= len)
+        ;
+    str[len - i + 1] = '\0';
+
+    return str;
 }

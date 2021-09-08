@@ -8,7 +8,7 @@ int split(char *, char **, char);
 
 int main(void) {
     char *args[10];
-    char buffer[] = "/bin/ls -l -a -b -c -d -e -f -g";
+    char buffer[] = "/bin/ls    -l    -a      -b     -c";
     int length = strlen(buffer);
 
     printf("length: %d\n", length);
